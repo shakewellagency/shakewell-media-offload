@@ -1,0 +1,21 @@
+{
+  "core": null,
+  "port": 8910,
+  "testsPort": 8911,
+  "phpVersion": "8.3",
+  "plugins": [
+    ".",
+    "https://downloads.wordpress.org/plugin/plugin-check.latest-stable.zip"
+  ],
+  "config": {
+    "WP_DEBUG": true,
+    "SCRIPT_DEBUG": true
+  },
+  "env": {
+    "tests": {
+      "mappings": {
+        "wp-content/plugins/amazon-s3-and-cloudfront": "https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.3.4.3.zip"
+      }
+    }
+  }
+}
