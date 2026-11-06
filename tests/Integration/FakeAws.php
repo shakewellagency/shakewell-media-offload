@@ -12,7 +12,7 @@ use Shakewell\MediaOffload\Plugin;
 
 trait FakeAws {
 
-	private const ENV = array(
+	private static $aws_env = array(
 		'AWS_ACCESS_KEY_ID',
 		'AWS_SECRET_ACCESS_KEY',
 		'AWS_SESSION_TOKEN',
@@ -60,7 +60,7 @@ trait FakeAws {
 	private $old_log;
 
 	private function fake_aws_up(): void {
-		foreach ( self::ENV as $name ) {
+		foreach ( self::$aws_env as $name ) {
 			putenv( $name );
 		}
 		Credentials::reset();
@@ -75,7 +75,7 @@ trait FakeAws {
 	}
 
 	private function fake_aws_down(): void {
-		foreach ( self::ENV as $name ) {
+		foreach ( self::$aws_env as $name ) {
 			putenv( $name );
 		}
 		Credentials::reset();
