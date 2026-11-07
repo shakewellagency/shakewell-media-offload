@@ -1,10 +1,10 @@
 === Shakewell Media Offload for Amazon S3 ===
-Contributors: shakewell
+Contributors: shakewellagency
 Tags: s3, cloudfront, media, offload, uploads
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.1.0
+Stable tag: 0.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ Set these as constants in `wp-config.php` or as environment variables. If a `SHA
 
 * `SHAKEWELL_MEDIA_OFFLOAD_ENABLED` (required): `true` to switch the plugin on. Anything else leaves it off.
 * `SHAKEWELL_MEDIA_OFFLOAD_BUCKET`: bucket name (also read from `AS3CF_BUCKET`).
-* `SHAKEWELL_MEDIA_OFFLOAD_REGION`: for example `ap-southeast-2` (also `AS3CF_REGION`).
+* `SHAKEWELL_MEDIA_OFFLOAD_REGION`: for example `us-east-1` (also `AS3CF_REGION`).
 * `SHAKEWELL_MEDIA_OFFLOAD_PREFIX`: folder in the bucket put in front of the upload path. Default `wp-content/uploads/`. An empty value means the bucket root.
 * `SHAKEWELL_MEDIA_OFFLOAD_DELIVERY_DOMAIN`: the CloudFront (or other CDN) domain, without `https://` (also `AS3CF_DELIVERY_DOMAIN`). If empty, files are served from the bucket's own S3 address.
 
@@ -174,6 +174,12 @@ If no keys are in the environment, the plugin asks the credential service of the
 3. Set the constants or environment variables described above, ending with `SHAKEWELL_MEDIA_OFFLOAD_ENABLED=true`.
 
 == Changelog ==
+
+= 0.1.1 =
+* Works on any site: no client-specific wording in the code, tests or readme, and the compatibility filters are documented as general WP Offload Media compatibility.
+* Shows a dismissible admin notice when the plugin is switched on but no valid bucket or region is set.
+* Admin notices have a dismiss button. A dismissed notice returns on the next page load, so a setup problem stays visible until it is fixed.
+* Readme contributor corrected.
 
 = 0.1.0 =
 * First release: upload of originals and sizes to S3, rewriting of attachment, image, srcset and content addresses, address parity with WP Offload Media Lite, deletion of an attachment's own objects, and the `urls` and `compare` WP-CLI commands.

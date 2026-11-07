@@ -90,7 +90,7 @@ trait FakeAws {
 	 */
 	private function switch_on(): void {
 		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_ENABLED=true' );
-		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_BUCKET=test-bucket' );
+		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_BUCKET=example-bucket' );
 		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_REGION=ap-southeast-2' );
 		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_DELIVERY_DOMAIN=media.example.com' );
 		putenv( 'AWS_ACCESS_KEY_ID=AKIDENV' );

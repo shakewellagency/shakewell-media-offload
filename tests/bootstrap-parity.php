@@ -16,14 +16,14 @@ if ( ! $tests_dir || ! is_file( $tests_dir . '/includes/functions.php' ) ) {
 require_once dirname( __DIR__ ) . '/vendor/yoast/phpunit-polyfills/phpunitpolyfills-autoload.php';
 require_once $tests_dir . '/includes/functions.php';
 
-// Merivale's offload settings, in the form its config/application.php defines them (a serialized array).
+// Offload settings in the form WP Offload Media reads from the AS3CF_SETTINGS constant (a serialized array).
 define(
 	'AS3CF_SETTINGS',
 	serialize(
 		array(
 			'provider'                       => 'aws',
 			'use-server-roles'               => true,
-			'bucket'                         => 'merivale-test-bucket',
+			'bucket'                         => 'example-bucket',
 			'region'                         => 'ap-southeast-2',
 			'copy-to-s3'                     => true,
 			'serve-from-s3'                  => true,

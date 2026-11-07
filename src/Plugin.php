@@ -41,6 +41,10 @@ final class Plugin {
 			return;
 		}
 
+		if ( '' === self::config()['bucket'] || '' === self::config()['region'] ) {
+			add_action( 'admin_notices', array( self::class, 'config_notice' ) );
+		}
+
 		self::hook();
 	}
 
@@ -65,7 +69,7 @@ final class Plugin {
 		foreach ( array( 'the_content', 'the_excerpt', 'render_block' ) as $name ) {
 			add_filter( $name, array( Urls::class, 'content' ), 100 );
 		}
-		// Names the Merivale theme (and older code) already call.
+		// Names that code written for WP Offload Media calls (a theme or plugin that filters post content).
 		add_filter( 'as3cf_filter_post_local_to_provider', array( Urls::class, 'content' ) );
 		add_filter( 'as3cf_filter_post_local_to_s3', array( Urls::class, 'content' ) );
 	}
@@ -87,8 +91,23 @@ final class Plugin {
 		}
 
 		printf(
-			'<div class="notice notice-warning"><p>%s</p></div>',
+			'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
 			esc_html__( 'Shakewell Media Offload is switched on but is idle because WP Offload Media is active. Deactivate WP Offload Media to let this plugin take over.', 'shakewell-media-offload' )
+		);
+	}
+
+	/**
+	 * Admin notice shown when the plugin is switched on but no valid bucket or region is set, so it cannot send
+	 * or rewrite anything.
+	 */
+	public static function config_notice(): void {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
+			esc_html__( 'Shakewell Media Offload is switched on but has no valid bucket or region, so it is doing nothing. Set SHAKEWELL_MEDIA_OFFLOAD_BUCKET and SHAKEWELL_MEDIA_OFFLOAD_REGION in wp-config.php (see the plugin readme).', 'shakewell-media-offload' )
 		);
 	}
 
