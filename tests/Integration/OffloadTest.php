@@ -72,6 +72,25 @@ final class OffloadTest extends WP_UnitTestCase {
 		$this->assertStringStartsWith( home_url(), wp_get_attachment_url( $id ) );
 	}
 
+	public function test_switched_on_without_a_bucket_or_region_explains_itself_in_an_admin_notice(): void {
+		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_ENABLED=true' );
+		Plugin::reset();
+		remove_all_actions( 'admin_notices' );
+		Plugin::boot();
+		$this->assertNotFalse( has_action( 'admin_notices', array( Plugin::class, 'config_notice' ) ) );
+
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+		ob_start();
+		Plugin::config_notice();
+		$html = (string) ob_get_clean();
+		$this->assertStringContainsString( 'is-dismissible', $html );
+		$this->assertStringContainsString( 'SHAKEWELL_MEDIA_OFFLOAD_BUCKET', $html );
+
+		remove_all_actions( 'admin_notices' );
+		$this->switch_on();
+		$this->assertFalse( has_action( 'admin_notices', array( Plugin::class, 'config_notice' ) ) );
+	}
+
 	public function test_the_switch_is_a_truthy_constant_or_environment_variable_or_the_filter(): void {
 		$this->assertFalse( Plugin::enabled() );
 		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_ENABLED=false' );
@@ -261,7 +280,7 @@ final class OffloadTest extends WP_UnitTestCase {
 		$html = apply_filters( 'the_content', '<img src="' . wp_get_upload_dir()['baseurl'] . '/' . $path . '"><a href="//' . preg_replace( '#^https?://#', '', wp_get_upload_dir()['baseurl'] ) . '/' . $path . '?v=1">x</a>' );
 		$this->assertStringContainsString( 'src="' . $base . $meta['sizes']['thumbnail']['file'] . '"', $html );
 		$this->assertStringContainsString( 'href="//media.example.com/wp-content/uploads/' . $path . '?v=1"', $html );
-		$this->assertSame( $base . $meta['sizes']['thumbnail']['file'], apply_filters( 'as3cf_filter_post_local_to_provider', wp_get_upload_dir()['baseurl'] . '/' . $path ), 'the compatibility filter the Merivale theme calls' );
+		$this->assertSame( $base . $meta['sizes']['thumbnail']['file'], apply_filters( 'as3cf_filter_post_local_to_provider', wp_get_upload_dir()['baseurl'] . '/' . $path ), 'the filter that code written for WP Offload Media calls' );
 		$this->assertSame( $base . $meta['sizes']['thumbnail']['file'], apply_filters( 'as3cf_filter_post_local_to_s3', wp_get_upload_dir()['baseurl'] . '/' . $path ) );
 
 		$this->assertStringStartsWith( home_url(), wp_get_attachment_url( $local ) );
