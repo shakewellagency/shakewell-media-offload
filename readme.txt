@@ -178,7 +178,7 @@ If no keys are in the environment, the plugin asks the credential service of the
 = 0.1.1 =
 * Works on any site: no client-specific wording in the code, tests or readme, and the compatibility filters are documented as general WP Offload Media compatibility.
 * Shows a dismissible admin notice when the plugin is switched on but no valid bucket or region is set.
-* Admin notices can be dismissed.
+* Admin notices have a dismiss button. A dismissed notice returns on the next page load, so a setup problem stays visible until it is fixed.
 * Readme contributor corrected.
 
 = 0.1.0 =
