@@ -2,7 +2,7 @@
 /**
  * URL parity with WP Offload Media Lite 3.4.3, the real plugin, loaded in the test environment only.
  *
- * Attachments are offloaded the way the plugin offloads them (its own item class, its own tables, Merivale's
+ * Attachments are offloaded the way the plugin offloads them (its own item class, its own tables, the
  * settings from AS3CF_SETTINGS). Only the copy to S3 is skipped, because the AWS SDK it uses does not go through
  * the WordPress HTTP API. Every address WP Offload Media makes is captured, its hooks are removed, this plugin's
  * hooks are added, and the addresses are compared byte for byte.
@@ -91,7 +91,7 @@ final class UrlParityTest extends WP_UnitTestCase {
 				'the_content',
 				wp_get_attachment_image( $id, 'full' ) . ' <a href="' . esc_url( wp_get_attachment_url( $id ) ) . '">link</a> ' . wp_get_attachment_image( $id, 'medium' )
 			);
-			// The Merivale theme's filter, on addresses it holds in their local form.
+			// The WP Offload Media content filter, on addresses it holds in their local form.
 			$local                = $this->local_url( $id );
 			$out[ "$case filter" ] = (string) apply_filters( 'as3cf_filter_post_local_to_provider', $local );
 			// Every file of the attachment in its local form: as stored, percent-encoded, with a query string (a name that really changes when encoded is left out: WP Offload Media leaves that local form alone and this plugin rewrites it, see the next test), http and scheme-less.
@@ -186,7 +186,7 @@ final class UrlParityTest extends WP_UnitTestCase {
 	public function test_settings_are_read_from_the_serialized_as3cf_settings_constant(): void {
 		$this->assertSame(
 			array(
-				'bucket' => 'merivale-test-bucket',
+				'bucket' => 'example-bucket',
 				'region' => 'ap-southeast-2',
 				'prefix' => 'wp-content/uploads/',
 				'domain' => 'media.example.com',
@@ -226,7 +226,7 @@ final class UrlParityTest extends WP_UnitTestCase {
 		$deleted = array();
 		foreach ( $calls as $call ) {
 			$this->assertSame( 'DELETE', $call[0] );
-			$this->assertStringStartsWith( 'https://merivale-test-bucket.s3.ap-southeast-2.amazonaws.com/', $call[1] );
+			$this->assertStringStartsWith( 'https://example-bucket.s3.ap-southeast-2.amazonaws.com/', $call[1] );
 			$deleted[] = rawurldecode( ltrim( (string) wp_parse_url( $call[1], PHP_URL_PATH ), '/' ) );
 		}
 		sort( $deleted );
