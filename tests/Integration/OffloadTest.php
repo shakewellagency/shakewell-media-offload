@@ -153,7 +153,7 @@ final class OffloadTest extends WP_UnitTestCase {
 		$this->assertSame( $expected, $keys );
 		$this->assertCount( 4, $puts, 'scaled, original, medium and thumbnail' );
 		foreach ( $puts as $call ) {
-			$this->assertStringStartsWith( 'https://test-bucket.s3.ap-southeast-2.amazonaws.com/wp-content/uploads/', $call[1] );
+			$this->assertStringStartsWith( 'https://example-bucket.s3.ap-southeast-2.amazonaws.com/wp-content/uploads/', $call[1] );
 			$this->assertSame( 'image/jpeg', $call[2]['headers']['content-type'] );
 			$this->assertSame( hash( 'sha256', $call[2]['body'] ), $call[2]['headers']['x-amz-content-sha256'] );
 			$this->assertSame( 0, $call[2]['redirection'] );
@@ -292,7 +292,7 @@ final class OffloadTest extends WP_UnitTestCase {
 		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_DELIVERY_DOMAIN=' );
 		Plugin::reset();
 		$id = $this->upload();
-		$this->assertStringStartsWith( 'https://test-bucket.s3.ap-southeast-2.amazonaws.com/wp-content/uploads/', wp_get_attachment_url( $id ) );
+		$this->assertStringStartsWith( 'https://example-bucket.s3.ap-southeast-2.amazonaws.com/wp-content/uploads/', wp_get_attachment_url( $id ) );
 
 		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_BUCKET=a.dotted.bucket' );
 		putenv( 'SHAKEWELL_MEDIA_OFFLOAD_REGION=us-east-1' );
